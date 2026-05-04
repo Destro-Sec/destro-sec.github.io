@@ -1,0 +1,186 @@
+/* extras.css — marquee, manifesto, line-art, magnetic, skill chips, cuboid hover tilt */
+
+/* Hero line-art */
+.hero-lineart {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
+}
+.la-path {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: drawLine 4s ease-out forwards;
+}
+.la-2 { animation-delay: 0.3s; }
+.la-dot { animation: fadeIn 1s ease-out 1.5s forwards; opacity: 0; }
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ─── Marquee ─── */
+.marquee-section {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0;
+  background: rgba(255, 255, 255, 0.015);
+  overflow: hidden;
+}
+.marquee-row {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.marquee-row-1 { padding: 18px 0; border-bottom: 1px solid var(--color-border); }
+.marquee-row-2 { padding: 28px 0; }
+
+.marquee-track {
+  display: inline-flex;
+  gap: 48px;
+  animation: marquee 50s linear infinite;
+  will-change: transform;
+}
+.marquee-reverse { animation-direction: reverse; animation-duration: 70s; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+.m-bullet {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  display: inline-block;
+}
+.marquee-item-display {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.18);
+  text-stroke: 1px rgba(255, 255, 255, 0.18);
+  transition: color 200ms, -webkit-text-stroke-color 200ms;
+}
+.marquee-row-2:hover .marquee-track { animation-play-state: paused; }
+.marquee-item-display:hover {
+  color: var(--color-brand);
+  -webkit-text-stroke-color: var(--color-brand);
+}
+
+/* ─── Manifesto ─── */
+.manifesto {
+  padding: var(--space-10) 0;
+  position: relative;
+}
+.manifesto-text {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5.5vw, 76px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  max-width: 1100px;
+  margin: var(--space-5) 0 var(--space-7);
+}
+.manif-word {
+  display: inline;
+  transition: opacity 200ms ease-out, color 300ms ease-out;
+}
+.manifesto-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* ─── Magnetic Button ─── */
+.magnetic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.magnetic-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* ─── Cuboid hover tilt (3D pop) ─── */
+.cuboid-style-isometric .cuboid:hover { transform: rotateX(6deg) rotateY(-2deg); transition: transform 300ms var(--ease-spring); }
+.cuboid-style-depth .cuboid:hover { transform: translateY(-2px); transition: transform 300ms var(--ease-spring); }
+
+/* ─── Skill chips on services panel ─── */
+.vc-skills {
+  margin-top: var(--space-7);
+  padding-top: var(--space-6);
+  border-top: 1px dashed var(--color-border);
+}
+.vc-skills-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+  display: block;
+}
+.skill-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skill-chip {
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+  background: rgba(var(--accent-rgb), 0.05);
+  border: 1px solid rgba(var(--accent-rgb), 0.18);
+  border-radius: var(--radius-full);
+  transition: all 200ms ease;
+  cursor: default;
+}
+.skill-chip:hover {
+  background: rgba(var(--accent-rgb), 0.14);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+}
+
+/* Vertical card — bigger arrow + interactive cube hover */
+.vertical-card {
+  transition: all 300ms var(--ease-standard);
+}
+.vertical-card:hover .vertical-card-icon {
+  transform: rotate(8deg) scale(1.05);
+}
+.vertical-card-icon { transition: transform 300ms var(--ease-spring); }
+
+/* CTA headline */
+.cta-headline {
+  font-size: clamp(40px, 6vw, 72px) !important;
+  line-height: 1.05 !important;
+}
