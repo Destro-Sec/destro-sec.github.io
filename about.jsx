@@ -128,6 +128,36 @@ const AboutPage = ({ onNav }) => {
         </div>
       </section>
 
+      <section className="milestones">
+        <div className="container">
+          <Reveal>
+            <span className="eyebrow">MILESTONES</span>
+            <h2 className="section-h2">Three years, one thread.</h2>
+          </Reveal>
+          <div className="ms-rail">
+            {[
+              { y: '2023', t: 'Founded in Bangalore', d: 'Four practitioners, one shared frustration. Office One opens.' },
+              { y: '2023', t: 'First enterprise red team', d: 'Sequoia FinTech engagement closes — three criticals their previous vendor missed.' },
+              { y: '2024', t: 'Education arm launches', d: 'IIT Hyderabad CTF for 800 students. Cohort 01 runs in autumn.' },
+              { y: '2024', t: 'Software practice begins', d: 'Nordic Health Co. ships their patient portal. Zero criticals at audit.' },
+              { y: '2025', t: '12 college partnerships', d: 'Bootcamp grads land at Microsoft, Razorpay, CRED, and three Big-4 SOCs.' },
+              { y: '2026', t: 'Cohort 08 · today', d: 'Now operating across India, Singapore, and the Nordics.' }
+            ].map((m, i) => (
+              <Reveal key={i} delay={i * 50}>
+                <div className="ms-item">
+                  <div className="ms-y mono">{m.y}</div>
+                  <div className="ms-bullet" />
+                  <div className="ms-body">
+                    <div className="ms-t">{m.t}</div>
+                    <div className="ms-d">{m.d}</div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="join">
         <div className="container">
           <Reveal>

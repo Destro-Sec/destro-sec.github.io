@@ -110,10 +110,10 @@ const SecurityPanel = ({ onNav, contentHeadingRef }) => {
       <div className="sec-hero">
         <div className="sec-hero-left">
           <span className="chip" style={{ color: v.color, borderColor: `rgba(${v.rgb}, 0.4)`, background: `rgba(${v.rgb}, 0.08)` }}>
-            <span className="dot" />BUILD FOR BREAK IN
+            <span className="dot" />BUILT FOR BREAK IN
           </span>
           <h2 ref={contentHeadingRef} tabIndex="-1" className="vc-headline" style={{ outline: 'none' }}>
-            We break in for you to <span style={{ color: v.color }}>build better.</span>
+            We break in so you can <span style={{ color: v.color }}>build better.</span>
           </h2>
           <p className="lead vc-desc">Adversarial security testing from operators who think like attackers. Every engagement maps to how real intrusions actually unfold.</p>
           <div className="sec-stats">
@@ -173,6 +173,32 @@ const SecurityPanel = ({ onNav, contentHeadingRef }) => {
         <span className="vc-skills-label">ARSENAL</span>
         <div className="skill-chip-row" style={{ '--accent': v.color, '--accent-rgb': v.rgb }}>
           {(window.SKILL_CHIPS?.security || []).map(s => <span key={s} className="skill-chip">{s}</span>)}
+        </div>
+      </div>
+
+      <div className="sec-compliance">
+        <span className="eyebrow">COMPLIANCE & FRAMEWORKS</span>
+        <div className="sec-comp-row">
+          {['ISO 27001', 'SOC 2 Type II', 'PCI-DSS', 'HIPAA', 'DPDPA 2023', 'RBI ITF', 'CERT-In', 'OWASP ASVS', 'MITRE ATT&CK'].map(f => (
+            <div key={f} className="sec-comp-chip">{f}</div>
+          ))}
+        </div>
+      </div>
+
+      <div className="sec-deliverables">
+        <span className="eyebrow">WHAT YOU GET</span>
+        <div className="sec-deliv-grid">
+          {[
+            { t: 'Executive summary', d: 'One page, board-ready. No CVSS jargon.' },
+            { t: 'Technical findings', d: 'Reproducible PoC, severity, fix, and re-test plan.' },
+            { t: 'Detection feedback', d: 'What your SOC saw vs what we did. Tuning notes included.' },
+            { t: 'Remediation roadmap', d: '90-day prioritized plan your team will actually finish.' }
+          ].map(d => (
+            <div key={d.t} className="sec-deliv" style={{ '--accent': v.color, '--accent-rgb': v.rgb }}>
+              <div className="sec-deliv-t">{d.t}</div>
+              <div className="sec-deliv-d">{d.d}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -256,6 +282,30 @@ const SoftwarePanel = ({ onNav, contentHeadingRef }) => {
       <div className="sw-cta">
         <button className="btn btn-primary btn-lg" onClick={() => onNav('quote', { vertical: 'software' })}>Scope a build →</button>
       </div>
+
+      <div className="sw-process">
+        <span className="eyebrow">HOW WE BUILD</span>
+        <div className="sw-proc-grid">
+          {[
+            { n: '01', t: 'Threat Model', d: 'Before a line of code, we map abuse cases against your data and users.' },
+            { n: '02', t: 'Architect', d: 'Auth, secrets, and trust boundaries are designed in — not added later.' },
+            { n: '03', t: 'Build & Review', d: 'Two-pair review on every PR; SAST/DAST in CI; threat-model gates per release.' },
+            { n: '04', t: 'Hand Off', d: 'Runbooks, alerting, and a 30-day pairing window so your team owns it.' }
+          ].map(p => (
+            <div key={p.n} className="sw-proc" style={{ '--accent': v.color, '--accent-rgb': v.rgb }}>
+              <div className="sw-proc-num mono">{p.n}</div>
+              <div className="sw-proc-t">{p.t}</div>
+              <div className="sw-proc-d">{p.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="sw-case glass" style={{ '--accent': v.color, '--accent-rgb': v.rgb }}>
+        <div className="sw-case-tag mono" style={{ color: v.color }}>CASE STUDY · NORDIC HEALTH CO.</div>
+        <blockquote className="sw-case-q">"Their team shipped our patient portal in 14 weeks. Zero criticals in our first external audit."</blockquote>
+        <div className="sw-case-meta mono">— Head of Engineering · HIPAA + ISO 27001 + SOC 2</div>
+      </div>
     </div>
   );
 };
@@ -286,7 +336,7 @@ const EducationPanel = ({ onNav, contentHeadingRef }) => {
       <div className="ed-hero">
         <div>
           <span className="chip" style={{ color: v.color, borderColor: `rgba(${v.rgb}, 0.4)`, background: `rgba(${v.rgb}, 0.08)` }}>
-            <span className="dot" />BUILD FOR BREAK IN
+            <span className="dot" />BUILT FOR BREAK IN
           </span>
           <h2 ref={contentHeadingRef} tabIndex="-1" className="vc-headline" style={{ outline: 'none' }}>
             Train the next generation<br/>of <span style={{ color: v.color }}>breakers.</span>
@@ -358,6 +408,27 @@ const EducationPanel = ({ onNav, contentHeadingRef }) => {
       <div className="ed-cta">
         <button className="btn btn-primary btn-lg" onClick={() => onNav('quote', { vertical: 'education' })}>Host us at your campus →</button>
         <button className="btn btn-ghost" onClick={() => onNav('contact')}>Apply to a cohort →</button>
+      </div>
+
+      <div className="ed-partners">
+        <span className="vc-skills-label">COLLEGE PARTNERS</span>
+        <div className="ed-part-row">
+          {['IIT Hyderabad', 'BITS Goa', 'IIIT-B', 'NIT Trichy', 'VIT Vellore', 'PES University', 'Manipal', 'SRM Chennai'].map(c => (
+            <div key={c} className="ed-part-chip">{c}</div>
+          ))}
+        </div>
+        <blockquote className="ed-part-q">
+          "Their CTF infra ran flawlessly for 800 of our students. The mentorship after was even better."
+          <cite className="mono">— Prof. Anand · IIT Hyderabad</cite>
+        </blockquote>
+      </div>
+
+      <div className="ed-cohort-cta glass" style={{ '--accent': v.color, '--accent-rgb': v.rgb }}>
+        <div>
+          <div className="ed-cohort-tag mono" style={{ color: v.color }}>NEXT COHORT · 12 SEATS LEFT</div>
+          <div className="ed-cohort-when">Cohort 08 · starts June 17, 2026 · 6 weeks · live online</div>
+        </div>
+        <button className="btn btn-primary" onClick={() => onNav('contact')}>Apply now →</button>
       </div>
     </div>
   );

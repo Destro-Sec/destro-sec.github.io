@@ -31,7 +31,10 @@ function App() {
       about: '03 About',
       team: '04 Team Profile',
       contact: '05 Contact',
-      quote: '06 Quote'
+      quote: '06 Quote',
+      blog: '07 Blog',
+      'blog-post': '08 Blog Post',
+      'blog-author': '09 Blog Author'
     };
     document.body.setAttribute('data-screen-label', labels[route.page] || route.page);
   }, [route.page]);
@@ -55,6 +58,9 @@ function App() {
     case 'team':     pageEl = <TeamProfilePage onNav={onNav} memberId={route.params.id}/>; break;
     case 'contact':  pageEl = <ContactPage onNav={onNav}/>; break;
     case 'quote':    pageEl = <QuotePage onNav={onNav} initialVertical={route.params.vertical}/>; break;
+    case 'blog':         pageEl = <BlogHomePage onNav={onNav}/>; break;
+    case 'blog-post':    pageEl = <BlogPostPage onNav={onNav} postId={route.params.id}/>; break;
+    case 'blog-author':  pageEl = <BlogAuthorPage onNav={onNav} authorId={route.params.id}/>; break;
     default:         pageEl = <HomePage onNav={onNav} tweaks={tweaks}/>;
   }
 
@@ -91,6 +97,12 @@ function App() {
         <TweakButton label="Team profile" onClick={() => onNav('team', { id: 'aarav-mehta' })}/>
         <TweakButton label="Contact" onClick={() => onNav('contact')}/>
         <TweakButton label="Get a Quote" onClick={() => onNav('quote')}/>
+        <TweakButton label="Blog" onClick={() => onNav('blog')}/>
+        <TweakButton label="Post · Technical" onClick={() => onNav('blog-post', { id: 'react2shell-cve' })}/>
+        <TweakButton label="Post · Launch" onClick={() => onNav('blog-post', { id: 'm-dash-launch' })}/>
+        <TweakButton label="Post · Event" onClick={() => onNav('blog-post', { id: 'nullcon-2026-recap' })}/>
+        <TweakButton label="Post · Manifesto" onClick={() => onNav('blog-post', { id: 'fundraise-2026' })}/>
+        <TweakButton label="Author page" onClick={() => onNav('blog-author', { id: 'priya-iyer' })}/>
       </TweaksPanel>
     </>
   );

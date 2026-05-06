@@ -6,7 +6,8 @@ const QuotePage = ({ onNav, initialVertical }) => {
     who: '', name: '', email: '',
     vertical: initialVertical || '', need: '',
     timeline: '', budget: '', size: '',
-    note: '', source: ''
+    note: '', source: '',
+    incident: false
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -57,6 +58,17 @@ const QuotePage = ({ onNav, initialVertical }) => {
               <div><span className="mono">TIMELINE</span> {data.timeline}</div>
               {data.budget && <div><span className="mono">BUDGET</span> {data.budget}</div>}
             </div>
+
+            <div className="next-steps">
+              <h3 className="ns-title mono">WHAT HAPPENS NEXT</h3>
+              <ol className="ns-list">
+                <li><span className="ns-when mono">WITHIN 24h</span><span className="ns-what">A founder reads your request and replies — not a bot, not an SDR.</span></li>
+                <li><span className="ns-when mono">DAY 2–3</span><span className="ns-what">30-min scoping call. We map your threat model and the actual question we're answering.</span></li>
+                <li><span className="ns-when mono">DAY 4–5</span><span className="ns-what">Written proposal: scope, deliverables, fixed price, calendar.</span></li>
+                <li><span className="ns-when mono">DAY 7+</span><span className="ns-what">If we're a fit, we sign and start. If not, we'll point you to someone who is.</span></li>
+              </ol>
+            </div>
+
             <div className="success-actions">
               <button className="btn btn-secondary" onClick={() => onNav('about')}>While you wait, meet the team →</button>
               <button className="btn btn-ghost" onClick={() => onNav('home')}>Back to home</button>
@@ -74,6 +86,11 @@ const QuotePage = ({ onNav, initialVertical }) => {
           <span className="eyebrow">GET A QUOTE</span>
           <h1 className="quote-h1">Tell us what<br/>you're working on.</h1>
         </section>
+
+        <div className="quote-incident-banner" role="alert">
+          <div className="qib-tag mono">ACTIVE INCIDENT?</div>
+          <div className="qib-msg">If you're being attacked right now, skip the form. Call <a href="tel:+919876543200" className="qib-phone">+91 98765 43200</a> — 24/7 IR line. We'll keep this form open for everything else.</div>
+        </div>
 
         <div className="quote-stepper">
           {steps.map((label, i) => {

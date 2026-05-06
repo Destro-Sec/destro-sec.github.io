@@ -28,6 +28,7 @@ const Nav = ({ current, onNav }) => {
     { id: 'home', label: 'Home' },
     { id: 'services', label: 'Services' },
     { id: 'about', label: 'About' },
+    { id: 'blog', label: 'Blog' },
     { id: 'contact', label: 'Contact' }
   ];
 
@@ -119,7 +120,7 @@ const Footer = ({ onNav }) => (
       <div className="footer-bottom">
         <span>© 2026 Destro Sec. All rights reserved.</span>
         <span className="mono" style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
-          v2.0 — build for break in
+          v2.0 — built for break in
         </span>
       </div>
     </div>
@@ -215,8 +216,8 @@ const VERTICAL_DATA = {
     name: 'Security',
     color: '#e63946',
     rgb: '230, 57, 70',
-    eyebrow: 'BUILD FOR BREAK IN',
-    headline: 'We break in for you to build better.',
+    eyebrow: 'BUILT FOR BREAK IN',
+    headline: 'We break in so you can build better.',
     description: 'Adversarial security testing from operators who think like attackers. Pen tests, red team engagements, and incident response that map to the way real intrusions actually happen.',
     services: [
       { name: 'Penetration Testing', desc: 'External, internal, and web app assessments scoped to your threat model.' },
@@ -247,7 +248,7 @@ const VERTICAL_DATA = {
     name: 'Education',
     color: '#ffbe0b',
     rgb: '255, 190, 11',
-    eyebrow: 'BUILD FOR BREAK IN',
+    eyebrow: 'BUILT FOR BREAK IN',
     headline: 'Train the next generation of breakers.',
     description: 'College workshops, CTFs, and bootcamps run by practitioners — not slide-deck consultants. We teach how attacks actually work, then how to build systems that survive them.',
     services: [

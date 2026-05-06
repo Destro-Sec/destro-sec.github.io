@@ -6,7 +6,10 @@ const HomePage = ({ onNav, tweaks }) => {
       <HomeHero onNav={onNav} tweaks={tweaks} />
       <Marquee />
       <TrustBar />
+      <AudienceRouter onNav={onNav} />
       <VerticalsIntro onNav={onNav} />
+      <ProcessPreview />
+      <IndiaFirst />
       <Differentiator />
       <CaseStudyHighlight onNav={onNav} />
       <Manifesto />
@@ -40,7 +43,7 @@ const HomeHero = ({ onNav, tweaks }) => {
           <span className="eyebrow">SECURITY · SOFTWARE · EDUCATION</span>
         </Reveal>
         <h1 className="hero-headline">
-          <Reveal delay={80} as="span" className="hero-line"><span>Build For</span></Reveal>
+          <Reveal delay={80} as="span" className="hero-line"><span>Built For</span></Reveal>
           <Reveal delay={180} as="span" className="hero-line"><span className="hero-accent">Break In<span className="hero-period">.</span></span></Reveal>
         </h1>
         <Reveal delay={320}>
@@ -155,6 +158,99 @@ const VerticalsIntro = ({ onNav }) => {
   );
 };
 
+// ─── Audience Router ─────────────────────────────
+const AudienceRouter = ({ onNav }) => {
+  const audiences = [
+    { id: 'company', tag: 'I\u2019M A COMPANY', title: 'I need our product secured — or built to begin with.', sub: 'Pen tests, red team, software, retainers.', go: ['services', { vertical: 'security' }] },
+    { id: 'college', tag: 'I\u2019M A COLLEGE', title: 'I want a CTF or workshop on our campus.', sub: 'Programs run by working operators.', go: ['services', { vertical: 'education' }] },
+    { id: 'student', tag: 'I\u2019M A STUDENT', title: 'I want to learn how to break (and build) things.', sub: 'Bootcamps, mentorship, open CTFs.', go: ['contact', {}] }
+  ];
+  return (
+    <section className="audience">
+      <div className="container">
+        <Reveal>
+          <span className="eyebrow">PICK YOUR PATH</span>
+          <h2 className="section-h2">Who's reading this?</h2>
+        </Reveal>
+        <div className="audience-grid">
+          {audiences.map((a, i) => (
+            <Reveal key={a.id} delay={i * 80}>
+              <button className={`audience-card audience-${a.id}`} onClick={() => onNav(a.go[0], a.go[1])}>
+                <div className="audience-tag mono">{a.tag}</div>
+                <h3 className="audience-title">{a.title}</h3>
+                <p className="audience-sub">{a.sub}</p>
+                <div className="audience-cta mono">go <span aria-hidden>→</span></div>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─── Process Preview ─────────────────────────────
+const ProcessPreview = () => {
+  const steps = [
+    { n: '01', t: 'Scope', d: 'Same-day call. Real engineer. We map your threat model — not a checklist.' },
+    { n: '02', t: 'Engage', d: 'Operators on-site or remote. Daily updates in your channel of choice.' },
+    { n: '03', t: 'Report', d: 'Findings written for the people who fix them. Re-test included.' },
+    { n: '04', t: 'Stay close', d: 'Retainer or on-call. The same people pick up the phone at 3am.' }
+  ];
+  return (
+    <section className="process-preview">
+      <div className="container">
+        <Reveal>
+          <span className="eyebrow">HOW WE WORK</span>
+          <h2 className="section-h2">Four steps. No surprises.</h2>
+        </Reveal>
+        <div className="proc-rail">
+          {steps.map((s, i) => (
+            <Reveal key={s.n} delay={i * 80}>
+              <div className="proc-step">
+                <div className="proc-step-num mono">{s.n}</div>
+                <div className="proc-step-line" aria-hidden />
+                <div className="proc-step-t">{s.t}</div>
+                <div className="proc-step-d">{s.d}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─── India First ─────────────────────────────────
+const IndiaFirst = () => (
+  <section className="india-first">
+    <div className="container">
+      <Reveal>
+        <div className="if-grid">
+          <div>
+            <span className="eyebrow">BUILT IN INDIA · FOR INDIA-FIRST TEAMS</span>
+            <h2 className="section-h2">Compliance-aware <span style={{ color: 'var(--color-brand)' }}>by default.</span></h2>
+            <p className="lead" style={{ maxWidth: 540 }}>Engagements scoped to the frameworks Indian teams actually answer to. Reports your auditor and your regulator can both read.</p>
+          </div>
+          <div className="if-frameworks">
+            {[
+              { k: 'DPDPA 2023', d: 'Digital Personal Data Protection Act readiness, audits, and DPIA support.' },
+              { k: 'RBI ITF', d: 'Information Technology Framework for banks, NBFCs, and payment systems.' },
+              { k: 'CERT-In', d: '6-hour incident reporting playbooks and forensic retention controls.' },
+              { k: 'ISO 27001 / SOC 2', d: 'For your global customers — pre-audit pen tests and gap closure.' }
+            ].map(f => (
+              <div key={f.k} className="if-fw">
+                <div className="if-fw-k mono">{f.k}</div>
+                <div className="if-fw-d">{f.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
 const Differentiator = () => {
   const points = [
     { num: '01', title: 'Builders who break things', desc: 'Every consultant on our team has shipped production code. Every engineer has done offensive work. The two skills compound.' },
@@ -244,7 +340,7 @@ const FooterCTA = ({ onNav }) => (
     <div className="container">
       <Reveal>
         <div className="cta-block">
-          <h2 className="cta-headline">Ready to break in<br/>for build better?</h2>
+          <h2 className="cta-headline">Ready to break in<br/>to build better?</h2>
           <p className="lead" style={{ margin: '0 auto', textAlign: 'center' }}>
             Tell us what you're working on. We'll come back within 24 hours with a real human and a real plan.
           </p>
@@ -264,7 +360,7 @@ const FooterCTA = ({ onNav }) => (
 // ─── Marquee ────────────────────────────────────
 const Marquee = () => {
   const items1 = ['Penetration Testing', 'Red Team', 'OSCP', 'Burp Suite', 'Nuclei', 'Active Directory', 'Cloud Pen Test', 'Incident Response', 'Threat Modeling', 'OWASP Top 10', 'Custom Software', 'DevSecOps', 'CTF Hosting', 'Bootcamps'];
-  const items2 = ['BUILD FOR BREAK IN', 'BREAK IN FOR BUILD BETTER', 'SECURITY', 'SOFTWARE', 'EDUCATION', 'BUILDERS WHO BREAK', 'BREAKERS WHO BUILD', 'EST. 2023'];
+  const items2 = ['BUILT FOR BREAK IN', 'BREAK IN TO BUILD BETTER', 'SECURITY', 'SOFTWARE', 'EDUCATION', 'BUILDERS WHO BREAK', 'BREAKERS WHO BUILD', 'EST. 2023'];
   return (
     <section className="marquee-section" aria-hidden>
       <div className="marquee-row marquee-row-1">

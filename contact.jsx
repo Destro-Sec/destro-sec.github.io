@@ -120,7 +120,19 @@ const ContactPage = ({ onNav }) => {
               </div>
               <div className="info-block">
                 <div className="info-label mono">RESPONSE TIME</div>
-                <div className="info-value">Within 24 hours, business days</div>
+                <div className="rt-list">
+                  <div className="rt-row"><span className="rt-tag rt-incident">Active incident</span><span className="rt-time">&lt; 1 hour, 24/7</span></div>
+                  <div className="rt-row"><span className="rt-tag rt-quote">Quote / scoping</span><span className="rt-time">&lt; 24 hours, business days</span></div>
+                  <div className="rt-row"><span className="rt-tag rt-edu">College / student</span><span className="rt-time">2–3 business days</span></div>
+                </div>
+              </div>
+              <div className="info-block">
+                <div className="info-label mono">WHATSAPP</div>
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener" className="info-value wa-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: '-3px', marginRight: 6 }}><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+                  +91 98765 43210
+                </a>
+                <div className="text-muted" style={{ fontSize: 12, marginTop: 4 }}>For quick questions and scoping. No incidents on this line.</div>
               </div>
               <div className="info-block">
                 <div className="info-label mono">SOCIAL</div>
@@ -142,7 +154,38 @@ const ContactPage = ({ onNav }) => {
             </aside>
           </Reveal>
         </div>
+        <section className="contact-faq">
+          <Reveal>
+            <span className="eyebrow">FAQ</span>
+            <h2 className="section-h2" style={{ marginBottom: 32 }}>Common questions.</h2>
+          </Reveal>
+          <div className="faq-list">
+            {[
+              { q: 'Do you work with teams outside India?', a: "Yes. About 30% of our work is with Nordic, SE Asia, and US teams. Remote-first since day one." },
+              { q: 'Can you sign our NDA before scoping?', a: "Of course. We sign first, scope second. Send it on the contact form or to legal@destrosec.com." },
+              { q: 'What does an engagement actually cost?', a: "Pen tests start around ₹3L for a focused web app. Red teams from ₹15L. Software builds quoted by sprint. Education engagements are bespoke. We give honest numbers on the first call — no per-hour mystery boxes." },
+              { q: 'Is there a difference between you and a Big-4 firm?', a: "Yes. They send three names to the SOW and a different junior on the engagement. We send the founders, and they stay until the report is signed." },
+              { q: 'Do you offer retainers or just one-off work?', a: "Both. Retainers come with a real human number on-call and quarterly threat-model reviews." },
+              { q: 'I\u2019m a student — can I learn from you for free?', a: "Yes. Our community CTFs are free, and we run scholarships for the bootcamp. Hit the contact form and tell us about yourself." }
+            ].map((f, i) => (
+              <FaqItem key={i} q={f.q} a={f.a} />
+            ))}
+          </div>
+        </section>
       </div>
+    </div>
+  );
+};
+
+const FaqItem = ({ q, a }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`faq-item ${open ? 'open' : ''}`}>
+      <button className="faq-q" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+        <span>{q}</span>
+        <span className="faq-icon" aria-hidden>{open ? '−' : '+'}</span>
+      </button>
+      {open && <div className="faq-a">{a}</div>}
     </div>
   );
 };
@@ -160,3 +203,4 @@ const Field = ({ label, id, required, hint, error, children }) => (
 
 window.ContactPage = ContactPage;
 window.Field = Field;
+window.FaqItem = FaqItem;
