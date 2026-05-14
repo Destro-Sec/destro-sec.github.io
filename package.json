@@ -1,0 +1,18 @@
+{
+  "name": "destro-sec",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Destro Sec — Built For Break In. Security, Software & Education.",
+  "scripts": {
+    "build": "node scripts/generate-og.js && babel tweaks-panel.jsx components.jsx home.jsx services.jsx about.jsx contact.jsx quote.jsx blog-data.jsx blog-shared.jsx blog-home.jsx blog-post.jsx blog-author.jsx app.jsx --out-dir compiled",
+    "build:js": "babel tweaks-panel.jsx components.jsx home.jsx services.jsx about.jsx contact.jsx quote.jsx blog-data.jsx blog-shared.jsx blog-home.jsx blog-post.jsx blog-author.jsx app.jsx --out-dir compiled",
+    "build:og": "node scripts/generate-og.js",
+    "watch": "babel tweaks-panel.jsx components.jsx home.jsx services.jsx about.jsx contact.jsx quote.jsx blog-data.jsx blog-shared.jsx blog-home.jsx blog-post.jsx blog-author.jsx app.jsx --out-dir compiled --watch"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.28.6",
+    "@babel/preset-react": "^7.28.5",
+    "sharp": "^0.34.5"
+  }
+}

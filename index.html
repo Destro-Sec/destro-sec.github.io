@@ -3,39 +3,98 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Destro Sec — Built For Break In</title>
-<link rel="stylesheet" href="tokens.css"/>
-<link rel="stylesheet" href="layout.css"/>
-<link rel="stylesheet" href="home.css"/>
-<link rel="stylesheet" href="home-v2.css"/>
-<link rel="stylesheet" href="services.css"/>
-<link rel="stylesheet" href="services-v2.css"/>
-<link rel="stylesheet" href="services-v3.css"/>
-<link rel="stylesheet" href="about.css"/>
-<link rel="stylesheet" href="contact-quote.css"/>
-<link rel="stylesheet" href="about-contact-quote-v2.css"/>
-<link rel="stylesheet" href="extras.css"/>
-<link rel="stylesheet" href="blog.css"/>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<title>Destro Sec — Built For Break In</title>
+<meta name="description" content="Security consulting, software development, and hands-on education from operators who think like attackers. Pen tests, red team engagements, CTFs, and secure-by-default software — based in Bangalore."/>
+<meta name="robots" content="index, follow"/>
+<meta name="author" content="Destro Sec"/>
+
+<!-- Canonical -->
+<link rel="canonical" href="https://destrosec.com/"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://destrosec.com/"/>
+<meta property="og:title" content="Destro Sec — Built For Break In"/>
+<meta property="og:description" content="Security consulting, software development, and hands-on education from operators who think like attackers. Based in Bangalore."/>
+<meta property="og:image" content="https://destrosec.com/assets/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:site_name" content="Destro Sec"/>
+<meta property="og:locale" content="en_IN"/>
+
+<!-- Twitter / X Card (no account — card-only tags for sharing previews) -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Destro Sec — Built For Break In"/>
+<meta name="twitter:description" content="Security consulting, software development, and hands-on education from operators who think like attackers."/>
+<meta name="twitter:image" content="https://destrosec.com/assets/og-image.png"/>
+<meta name="twitter:image:alt" content="Destro Sec — Built For Break In"/>
+
+<!-- Security meta (supplementary — real headers via _headers / Cloudflare) -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/assets/logo.png"/>
+<link rel="apple-touch-icon" href="/assets/logo.png"/>
+<link rel="manifest" href="/site.webmanifest"/>
+
+<!-- Google Fonts — preconnect first, then stylesheet (non-blocking) -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"/>
+
+<!-- CDN preconnect -->
+<link rel="preconnect" href="https://unpkg.com"/>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="/tokens.css"/>
+<link rel="stylesheet" href="/layout.css"/>
+<link rel="stylesheet" href="/home.css"/>
+<link rel="stylesheet" href="/home-v2.css"/>
+<link rel="stylesheet" href="/services.css"/>
+<link rel="stylesheet" href="/services-v2.css"/>
+<link rel="stylesheet" href="/services-v3.css"/>
+<link rel="stylesheet" href="/about.css"/>
+<link rel="stylesheet" href="/contact-quote.css"/>
+<link rel="stylesheet" href="/about-contact-quote-v2.css"/>
+<link rel="stylesheet" href="/extras.css"/>
+<link rel="stylesheet" href="/blog.css"/>
+
+<!-- React — production builds (minified, no dev warnings, ~100x smaller than dev builds) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+
+<!-- GitHub Pages SPA routing: restore path from redirect stored by 404.html -->
+<script>
+  (function() {
+    var redir = sessionStorage.getItem('__ds_redirect');
+    if (redir) {
+      sessionStorage.removeItem('__ds_redirect');
+      window.history.replaceState(null, '', redir);
+    }
+  })();
+</script>
+
+<!-- Structured Data — page-specific schema updated by app.jsx on every route change -->
+<script id="page-schema" type="application/ld+json"></script>
 </head>
 <body>
 <div id="root"></div>
 
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="components.jsx"></script>
-<script type="text/babel" src="home.jsx"></script>
-<script type="text/babel" src="services.jsx"></script>
-<script type="text/babel" src="about.jsx"></script>
-<script type="text/babel" src="contact.jsx"></script>
-<script type="text/babel" src="quote.jsx"></script>
-<script type="text/babel" src="blog-data.jsx"></script>
-<script type="text/babel" src="blog-shared.jsx"></script>
-<script type="text/babel" src="blog-home.jsx"></script>
-<script type="text/babel" src="blog-post.jsx"></script>
-<script type="text/babel" src="blog-author.jsx"></script>
-<script type="text/babel" src="app.jsx"></script>
+<!-- Pre-compiled JS (no runtime Babel transpilation needed) -->
+<script src="/compiled/tweaks-panel.js"></script>
+<script src="/compiled/components.js"></script>
+<script src="/compiled/home.js"></script>
+<script src="/compiled/services.js"></script>
+<script src="/compiled/about.js"></script>
+<script src="/compiled/contact.js"></script>
+<script src="/compiled/quote.js"></script>
+<script src="/compiled/blog-data.js"></script>
+<script src="/compiled/blog-shared.js"></script>
+<script src="/compiled/blog-home.js"></script>
+<script src="/compiled/blog-post.js"></script>
+<script src="/compiled/blog-author.js"></script>
+<script src="/compiled/app.js"></script>
 </body>
 </html>

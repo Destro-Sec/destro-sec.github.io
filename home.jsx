@@ -161,9 +161,9 @@ const VerticalsIntro = ({ onNav }) => {
 // ─── Audience Router ─────────────────────────────
 const AudienceRouter = ({ onNav }) => {
   const audiences = [
-    { id: 'company', tag: 'I\u2019M A COMPANY', title: 'I need our product secured — or built to begin with.', sub: 'Pen tests, red team, software, retainers.', go: ['services', { vertical: 'security' }] },
-    { id: 'college', tag: 'I\u2019M A COLLEGE', title: 'I want a CTF or workshop on our campus.', sub: 'Programs run by working operators.', go: ['services', { vertical: 'education' }] },
-    { id: 'student', tag: 'I\u2019M A STUDENT', title: 'I want to learn how to break (and build) things.', sub: 'Bootcamps, mentorship, open CTFs.', go: ['contact', {}] }
+    { id: 'company', tag: "I'M A COMPANY", title: 'I need our product secured — or built to begin with.', sub: 'Pen tests, red team, software, retainers.', go: ['services', { vertical: 'security' }] },
+    { id: 'college', tag: "I'M A COLLEGE", title: 'I want a CTF or workshop on our campus.', sub: 'Programs run by working operators.', go: ['services', { vertical: 'education' }] },
+    { id: 'student', tag: "I'M A STUDENT", title: 'I want to learn how to break (and build) things.', sub: 'Bootcamps, mentorship, open CTFs.', go: ['contact', {}] }
   ];
   return (
     <section className="audience">
@@ -402,16 +402,20 @@ const Manifesto = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const words = ['We', 'break', 'things', 'on', 'purpose,', 'so', 'the', 'systems', 'you', 'build', 'survive', 'the', 'people', 'who', 'don\u2019t.'];
+  const words = ['We', 'break', 'things', 'on', 'purpose,', 'so', 'the', 'systems', 'you', 'build', 'survive', 'the', 'people', 'who', "don't."];
 
   return (
     <section className="manifesto" ref={ref}>
       <div className="container">
         <span className="eyebrow">MANIFESTO</span>
-        <h2 className="manifesto-text">
+        {/* Screen-reader accessible version of the animated text */}
+        <p className="sr-only">
+          We break things on purpose, so the systems you build survive the people who don't.
+        </p>
+        <h2 className="manifesto-text" aria-hidden>
           {words.map((w, i) => {
             const wp = Math.max(0, Math.min(1, (progress * words.length - i)));
-            const isAccent = ['break', 'things', 'survive', 'don\u2019t.'].includes(w);
+            const isAccent = ['break', 'things', 'survive', "don't."].includes(w);
             return (
               <span key={i} className="manif-word" style={{
                 opacity: 0.15 + wp * 0.85,

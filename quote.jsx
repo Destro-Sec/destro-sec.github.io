@@ -1,4 +1,8 @@
 // quote.jsx — Multi-step quote form
+//
+// SETUP: Replace FORMSPREE_ENDPOINT with your Formspree form URL.
+// Sign up free at https://formspree.io → create a form → copy the endpoint.
+const FORMSPREE_QUOTE_ENDPOINT = 'https://formspree.io/f/YOUR_QUOTE_FORM_ID';
 
 const QuotePage = ({ onNav, initialVertical }) => {
   const [step, setStep] = useState(1);
@@ -11,6 +15,7 @@ const QuotePage = ({ onNav, initialVertical }) => {
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const update = (k, v) => {
     setData(d => ({ ...d, [k]: v }));
@@ -36,7 +41,30 @@ const QuotePage = ({ onNav, initialVertical }) => {
 
   const next = () => { if (validateStep()) setStep(s => Math.min(4, s + 1)); };
   const back = () => setStep(s => Math.max(1, s - 1));
-  const submit = () => setSubmitted(true);
+
+  const submit = async () => {
+    setSending(true);
+    try {
+      const payload = {
+        ...data,
+        vertical: data.vertical === 'combo' ? 'Combination' : (VERTICAL_DATA[data.vertical]?.name || data.vertical)
+      };
+      const res = await fetch(FORMSPREE_QUOTE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setErrors({ _submit: 'Something went wrong. Please email info@destrosec.com directly.' });
+      }
+    } catch {
+      setErrors({ _submit: 'Network error. Please try again or email info@destrosec.com.' });
+    } finally {
+      setSending(false);
+    }
+  };
 
   const steps = ['About you', 'Your need', 'Scope', 'Review'];
 
@@ -46,7 +74,7 @@ const QuotePage = ({ onNav, initialVertical }) => {
         <div className="container">
           <div className="quote-success glass">
             <div className="success-icon">
-              <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none" aria-hidden>
                 <circle cx="16" cy="16" r="14" stroke="#06d6a0" strokeWidth="1.5"/>
                 <path d="M10 16l4 4 8-8" stroke="#06d6a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -54,7 +82,7 @@ const QuotePage = ({ onNav, initialVertical }) => {
             <h1>Request received, {data.name.split(' ')[0]}.</h1>
             <p className="lead">We'll be in touch at <span className="text-brand mono">{data.email}</span> within 24 hours with a real human and a real plan.</p>
             <div className="success-summary">
-              <div><span className="mono">VERTICAL</span> {data.vertical && VERTICAL_DATA[data.vertical]?.name}</div>
+              <div><span className="mono">VERTICAL</span> {data.vertical === 'combo' ? 'Combination' : VERTICAL_DATA[data.vertical]?.name}</div>
               <div><span className="mono">TIMELINE</span> {data.timeline}</div>
               {data.budget && <div><span className="mono">BUDGET</span> {data.budget}</div>}
             </div>
@@ -92,25 +120,25 @@ const QuotePage = ({ onNav, initialVertical }) => {
           <div className="qib-msg">If you're being attacked right now, skip the form. Call <a href="tel:+919876543200" className="qib-phone">+91 98765 43200</a> — 24/7 IR line. We'll keep this form open for everything else.</div>
         </div>
 
-        <div className="quote-stepper">
+        <nav className="quote-stepper" aria-label="Form progress">
           {steps.map((label, i) => {
             const num = i + 1;
             const state = num < step ? 'done' : num === step ? 'active' : 'todo';
             return (
               <React.Fragment key={label}>
-                <div className={`step-bubble ${state}`}>
+                <div className={`step-bubble ${state}`} aria-current={state === 'active' ? 'step' : undefined}>
                   <div className="step-circle">
                     {state === 'done' ? (
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-label="completed"><path d="M3 7l3 3 5-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     ) : num}
                   </div>
                   <div className="step-label">{label}</div>
                 </div>
-                {i < steps.length - 1 && <div className={`step-line ${num < step ? 'done' : ''}`} />}
+                {i < steps.length - 1 && <div className={`step-line ${num < step ? 'done' : ''}`} aria-hidden />}
               </React.Fragment>
             );
           })}
-        </div>
+        </nav>
 
         <div className="quote-form glass">
           {step === 1 && <Step1 data={data} update={update} errors={errors} />}
@@ -118,23 +146,27 @@ const QuotePage = ({ onNav, initialVertical }) => {
           {step === 3 && <Step3 data={data} update={update} errors={errors} />}
           {step === 4 && <Step4 data={data} update={update} />}
 
+          {errors._submit && (
+            <div className="field-error" role="alert" style={{ margin: '0 0 16px' }}>{errors._submit}</div>
+          )}
+
           <div className="quote-nav">
             {step > 1 && <button className="btn btn-ghost" onClick={back}>← Back</button>}
             <div style={{ flex: 1 }} />
             {step < 4 ? (
               <button className="btn btn-primary" onClick={next}>
                 Next
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             ) : (
-              <button className="btn btn-primary btn-lg" onClick={submit}>
-                Send my request
+              <button className="btn btn-primary btn-lg" onClick={submit} disabled={sending} aria-busy={sending}>
+                {sending ? 'Sending…' : 'Send my request'}
               </button>
             )}
           </div>
         </div>
 
-        <div className="quote-aside mono">
+        <div className="quote-aside mono" aria-live="polite">
           <span>Step {step} of 4 · ~{[60, 90, 60, 30][step-1]}s remaining</span>
         </div>
       </div>
@@ -148,9 +180,9 @@ const Step1 = ({ data, update, errors }) => (
     <p className="step-sub">A few basics so we can route this to the right person.</p>
 
     <Field label="I am a..." id="who" required error={errors.who}>
-      <div className="button-group">
+      <div className="button-group" role="group">
         {['Company', 'College', 'Individual', 'Other'].map(opt => (
-          <button type="button" key={opt} className={`bg-option ${data.who === opt ? 'active' : ''}`} onClick={() => update('who', opt)}>
+          <button type="button" key={opt} className={`bg-option ${data.who === opt ? 'active' : ''}`} onClick={() => update('who', opt)} aria-pressed={data.who === opt}>
             {opt}
           </button>
         ))}
@@ -174,7 +206,7 @@ const Step2 = ({ data, update, errors }) => (
     <p className="step-sub">Pick a vertical and tell us briefly what we can help with.</p>
 
     <Field label="Vertical" id="vertical" required error={errors.vertical}>
-      <div className="vertical-picker">
+      <div className="vertical-picker" role="group" aria-label="Choose a vertical">
         {Object.entries(VERTICAL_DATA).map(([key, v]) => (
           <button
             type="button"
@@ -192,8 +224,9 @@ const Step2 = ({ data, update, errors }) => (
           type="button"
           className={`vp-option vp-combo ${data.vertical === 'combo' ? 'active' : ''}`}
           onClick={() => update('vertical', 'combo')}
+          aria-pressed={data.vertical === 'combo'}
         >
-          <div className="vp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/></svg></div>
+          <div className="vp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/></svg></div>
           <div className="vp-name">Combination</div>
         </button>
       </div>
@@ -218,9 +251,9 @@ const Step3 = ({ data, update, errors }) => (
     <p className="step-sub">All optional except timeline. The more we know, the more accurate our reply.</p>
 
     <Field label="Timeline" id="timeline" required error={errors.timeline}>
-      <div className="button-group">
+      <div className="button-group" role="group">
         {['ASAP', '1–3 months', '3–6 months', '6+ months', 'Not sure'].map(opt => (
-          <button type="button" key={opt} className={`bg-option ${data.timeline === opt ? 'active' : ''}`} onClick={() => update('timeline', opt)}>
+          <button type="button" key={opt} className={`bg-option ${data.timeline === opt ? 'active' : ''}`} onClick={() => update('timeline', opt)} aria-pressed={data.timeline === opt}>
             {opt}
           </button>
         ))}
@@ -228,9 +261,9 @@ const Step3 = ({ data, update, errors }) => (
     </Field>
 
     <Field label="Budget range" id="budget" hint="optional">
-      <div className="button-group">
+      <div className="button-group" role="group">
         {['Under ₹50K', '₹50K–2L', '₹2L–10L', 'Above ₹10L', 'Prefer to discuss'].map(opt => (
-          <button type="button" key={opt} className={`bg-option ${data.budget === opt ? 'active' : ''}`} onClick={() => update('budget', opt)}>
+          <button type="button" key={opt} className={`bg-option ${data.budget === opt ? 'active' : ''}`} onClick={() => update('budget', opt)} aria-pressed={data.budget === opt}>
             {opt}
           </button>
         ))}
@@ -239,9 +272,9 @@ const Step3 = ({ data, update, errors }) => (
 
     {(data.who === 'Company' || data.who === 'College') && (
       <Field label="Team / org size" id="size" hint="optional">
-        <div className="button-group">
+        <div className="button-group" role="group">
           {['1–10', '10–50', '50–200', '200+'].map(opt => (
-            <button type="button" key={opt} className={`bg-option ${data.size === opt ? 'active' : ''}`} onClick={() => update('size', opt)}>
+            <button type="button" key={opt} className={`bg-option ${data.size === opt ? 'active' : ''}`} onClick={() => update('size', opt)} aria-pressed={data.size === opt}>
               {opt}
             </button>
           ))}

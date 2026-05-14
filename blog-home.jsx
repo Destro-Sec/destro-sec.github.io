@@ -75,8 +75,15 @@ const BlogHero = ({ onNav, featured, sponsorPost }) => {
 
         {featured && (
           <div className="bh-featured-grid">
-            <article className="bh-feature" onClick={() => onNav('blog-post', { id: featured.id })}
-              style={{ '--h': fh.color, '--hr': fh.rgb }}>
+            <article
+              className="bh-feature"
+              role="link"
+              tabIndex={0}
+              onClick={() => onNav('blog-post', { id: featured.id })}
+              onKeyDown={(e) => e.key === 'Enter' && onNav('blog-post', { id: featured.id })}
+              aria-label={`Featured post: ${featured.title}`}
+              style={{ '--h': fh.color, '--hr': fh.rgb }}
+            >
               <div className="bh-feature-cover">
                 <window.BlogCover shape={featured.coverShape} hue={featured.hue} size="lg"/>
                 <div className="bh-feature-pin mono">FEATURED · {fh.name.toUpperCase()}</div>
@@ -143,7 +150,7 @@ const ArchiveRow = ({ post, onNav }) => {
       <span className="ar-cat mono" style={{ color: h.color }}>{h.name.toUpperCase()}</span>
       <span className="ar-title">{post.title}</span>
       <span className="ar-author mono">{a?.name}</span>
-      <span className="ar-read mono">{post.readMin}\u2032</span>
+      <span className="ar-read mono">{post.readMin}′</span>
     </button>
   );
 };

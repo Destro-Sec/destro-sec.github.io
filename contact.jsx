@@ -1,8 +1,13 @@
 // contact.jsx — Contact page
+//
+// SETUP: Replace FORMSPREE_ENDPOINT with your Formspree form URL.
+// Sign up free at https://formspree.io → create a form → copy the endpoint.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_CONTACT_FORM_ID';
 
 const ContactPage = ({ onNav }) => {
   const [form, setForm] = useState({ name: '', email: '', who: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState({});
 
   const update = (k, v) => {
@@ -21,9 +26,26 @@ const ContactPage = ({ onNav }) => {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
-    if (validate()) setSubmitted(true);
+    if (!validate()) return;
+    setSending(true);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(form)
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setErrors({ _submit: 'Something went wrong. Please email us directly at info@destrosec.com.' });
+      }
+    } catch {
+      setErrors({ _submit: 'Network error. Please try again or email info@destrosec.com.' });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -45,7 +67,7 @@ const ContactPage = ({ onNav }) => {
               {submitted ? (
                 <div className="contact-success glass">
                   <div className="success-icon">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
                       <circle cx="16" cy="16" r="14" stroke="#06d6a0" strokeWidth="1.5"/>
                       <path d="M10 16l4 4 8-8" stroke="#06d6a0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -79,7 +101,7 @@ const ContactPage = ({ onNav }) => {
                     />
                   </Field>
                   <Field label="I am a..." id="who" required error={errors.who}>
-                    <div className="button-group">
+                    <div className="button-group" role="group" aria-labelledby="who-label">
                       {['Company', 'College', 'Student', 'Other'].map(opt => (
                         <button
                           type="button"
@@ -101,11 +123,22 @@ const ContactPage = ({ onNav }) => {
                       placeholder="A line or two about what you're working on..."
                     />
                   </Field>
-                  {/* honeypot */}
+                  {errors._submit && (
+                    <div className="field-error" role="alert">{errors._submit}</div>
+                  )}
+                  {/* honeypot — hidden from real users, catches bots */}
                   <input type="text" name="website" tabIndex="-1" autoComplete="off" style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true" />
-                  <button type="submit" className="btn btn-primary btn-lg" style={{ alignSelf: 'flex-start' }}>
-                    Send message
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg"
+                    style={{ alignSelf: 'flex-start' }}
+                    disabled={sending}
+                    aria-busy={sending}
+                  >
+                    {sending ? 'Sending…' : 'Send message'}
+                    {!sending && (
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    )}
                   </button>
                 </form>
               )}
@@ -128,8 +161,8 @@ const ContactPage = ({ onNav }) => {
               </div>
               <div className="info-block">
                 <div className="info-label mono">WHATSAPP</div>
-                <a href="https://wa.me/919876543210" target="_blank" rel="noopener" className="info-value wa-link">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: '-3px', marginRight: 6 }}><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="info-value wa-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ verticalAlign: '-3px', marginRight: 6 }}><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1.1 3 .9 3.5.8.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
                   +91 98765 43210
                 </a>
                 <div className="text-muted" style={{ fontSize: 12, marginTop: 4 }}>For quick questions and scoping. No incidents on this line.</div>
@@ -137,9 +170,9 @@ const ContactPage = ({ onNav }) => {
               <div className="info-block">
                 <div className="info-label mono">SOCIAL</div>
                 <div className="info-stack">
-                  <a href="#" onClick={e => e.preventDefault()}>linkedin.com/company/destro-sec</a>
-                  <a href="#" onClick={e => e.preventDefault()}>instagram.com/destro_sec</a>
-                  <a href="#" onClick={e => e.preventDefault()}>github.com/destrosec</a>
+                  <a href="https://linkedin.com/company/destro-sec" target="_blank" rel="noopener noreferrer">linkedin.com/company/destro-sec</a>
+                  <a href="https://instagram.com/destro_sec" target="_blank" rel="noopener noreferrer">instagram.com/destro_sec</a>
+                  <a href="https://github.com/destrosec" target="_blank" rel="noopener noreferrer">github.com/destrosec</a>
                 </div>
               </div>
               <div className="info-block">
@@ -154,7 +187,7 @@ const ContactPage = ({ onNav }) => {
             </aside>
           </Reveal>
         </div>
-        <section className="contact-faq">
+        <section className="contact-faq" aria-label="Frequently asked questions">
           <Reveal>
             <span className="eyebrow">FAQ</span>
             <h2 className="section-h2" style={{ marginBottom: 32 }}>Common questions.</h2>
@@ -166,7 +199,7 @@ const ContactPage = ({ onNav }) => {
               { q: 'What does an engagement actually cost?', a: "Pen tests start around ₹3L for a focused web app. Red teams from ₹15L. Software builds quoted by sprint. Education engagements are bespoke. We give honest numbers on the first call — no per-hour mystery boxes." },
               { q: 'Is there a difference between you and a Big-4 firm?', a: "Yes. They send three names to the SOW and a different junior on the engagement. We send the founders, and they stay until the report is signed." },
               { q: 'Do you offer retainers or just one-off work?', a: "Both. Retainers come with a real human number on-call and quarterly threat-model reviews." },
-              { q: 'I\u2019m a student — can I learn from you for free?', a: "Yes. Our community CTFs are free, and we run scholarships for the bootcamp. Hit the contact form and tell us about yourself." }
+              { q: 'I’m a student — can I learn from you for free?', a: "Yes. Our community CTFs are free, and we run scholarships for the bootcamp. Hit the contact form and tell us about yourself." }
             ].map((f, i) => (
               <FaqItem key={i} q={f.q} a={f.a} />
             ))}
@@ -179,13 +212,19 @@ const ContactPage = ({ onNav }) => {
 
 const FaqItem = ({ q, a }) => {
   const [open, setOpen] = useState(false);
+  const bodyId = `faq-body-${q.slice(0, 20).replace(/\s/g, '-')}`;
   return (
     <div className={`faq-item ${open ? 'open' : ''}`}>
-      <button className="faq-q" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+      <button
+        className="faq-q"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        aria-controls={bodyId}
+      >
         <span>{q}</span>
         <span className="faq-icon" aria-hidden>{open ? '−' : '+'}</span>
       </button>
-      {open && <div className="faq-a">{a}</div>}
+      {open && <div className="faq-a" id={bodyId} role="region">{a}</div>}
     </div>
   );
 };
@@ -193,8 +232,8 @@ const FaqItem = ({ q, a }) => {
 const Field = ({ label, id, required, hint, error, children }) => (
   <div className={`field ${error ? 'has-error' : ''}`}>
     <label htmlFor={id} className="field-label">
-      {label}{required && <span className="req">*</span>}
-      {hint && <span className="field-hint mono">{hint}</span>}
+      {label}{required && <span className="req" aria-label="required">*</span>}
+      {hint && <span className="field-hint mono" aria-live="polite">{hint}</span>}
     </label>
     {children}
     {error && <div className="field-error" role="alert">{error}</div>}

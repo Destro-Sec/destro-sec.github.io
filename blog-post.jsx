@@ -74,7 +74,7 @@ const TechnicalPost = ({ post, author, coAuthors, onNav }) => {
       <header className="bp-head">
         <div className="bp-cat-row">
           <span className="chip" style={{ color: h.color, borderColor: `rgba(${h.rgb},0.4)`, background: `rgba(${h.rgb},0.08)` }}>
-            <span className="dot"/>{h.name} \u00b7 {post.format.toUpperCase()}
+            <span className="dot"/>{h.name} · {post.format.toUpperCase()}
           </span>
           {post.tags.slice(0, 3).map(t => <window.TagChip key={t} tag={t} hue={post.hue}/>)}
         </div>
@@ -170,7 +170,7 @@ fetch('/admin/preview', {
             <table className="bp-timeline-table">
               <tbody>
                 <tr><td className="mono">D+0</td><td>Initial report to security@</td></tr>
-                <tr><td className="mono">D+2</td><td>Triage call \u00b7 confirmed</td></tr>
+                <tr><td className="mono">D+2</td><td>Triage call · confirmed</td></tr>
                 <tr><td className="mono">D+11</td><td>Patch shipped</td></tr>
                 <tr><td className="mono">D+45</td><td>CVE assigned, public writeup approved</td></tr>
               </tbody>
@@ -197,7 +197,7 @@ const LaunchPost = ({ post, author, coAuthors, onNav }) => {
     <article className="container bp-launch">
       <header className="bp-launch-head">
         <div className="bp-cat-row">
-          <span className="chip" style={{ color: h.color, borderColor: `rgba(${h.rgb},0.4)`, background: `rgba(${h.rgb},0.08)` }}><span className="dot"/>LAUNCH \u00b7 {h.name.toUpperCase()}</span>
+          <span className="chip" style={{ color: h.color, borderColor: `rgba(${h.rgb},0.4)`, background: `rgba(${h.rgb},0.08)` }}><span className="dot"/>LAUNCH · {h.name.toUpperCase()}</span>
           {post.tags.slice(0, 3).map(t => <window.TagChip key={t} tag={t} hue={post.hue}/>)}
         </div>
         <h1 className="bp-h1 bp-launch-h1">{post.title}</h1>

@@ -124,11 +124,21 @@ const BlogCover = ({ shape = 'terminal', hue = 'security', size = 'md' }) => {
 };
 
 // ─── Tag chip ─────────────────────────────────────
+// Uses <button> when interactive (onClick) so keyboard users can activate it.
 const TagChip = ({ tag, hue = 'security', sm = false, onClick }) => {
   const h = window.HUE_DATA[hue] || window.HUE_DATA.security;
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`tag-chip ${sm ? 'sm' : ''}`}
+        onClick={onClick}
+        style={{ '--h': h.color, '--hr': h.rgb }}
+      >{tag}</button>
+    );
+  }
   return (
-    <span className={`tag-chip ${sm ? 'sm' : ''}`} onClick={onClick}
-      style={{ '--h': h.color, '--hr': h.rgb }}>{tag}</span>
+    <span className={`tag-chip ${sm ? 'sm' : ''}`} style={{ '--h': h.color, '--hr': h.rgb }}>{tag}</span>
   );
 };
 
@@ -143,7 +153,7 @@ const AuthorByline = ({ authorId, onNav, withDate, date, mini }) => {
       <span className="ab-avatar" style={{ background: `linear-gradient(135deg, ${h.color}40, var(--color-bg-elevated))`, color: h.color }}>{initials}</span>
       <span className="ab-name">{a.name}</span>
       {a.type === 'guest' && <span className="ab-guest mono">GUEST</span>}
-      {withDate && date && <span className="ab-date mono">{window.formatDate(date)} \u00b7 {window.fromNow(date)}</span>}
+      {withDate && date && <span className="ab-date mono">{window.formatDate(date)} · {window.fromNow(date)}</span>}
     </button>
   );
 };
@@ -174,9 +184,9 @@ const PostHoverLink = ({ postId, onNav, children, className = '' }) => {
         <span className="post-hover-card" style={{ left: pos.x, top: pos.y, '--h': h.color, '--hr': h.rgb }}>
           <span className="phc-cover"><BlogCover shape={p.coverShape} hue={p.hue} size="sm"/></span>
           <span className="phc-body">
-            <span className="phc-cat mono">{window.HUE_DATA[p.hue].name.toUpperCase()} \u00b7 {p.format.toUpperCase()}</span>
+            <span className="phc-cat mono">{window.HUE_DATA[p.hue].name.toUpperCase()} · {p.format.toUpperCase()}</span>
             <span className="phc-title">{p.title}</span>
-            <span className="phc-meta mono">{a?.name} \u00b7 {p.readMin} min read</span>
+            <span className="phc-meta mono">{a?.name} · {p.readMin} min read</span>
           </span>
         </span>
       )}
@@ -198,9 +208,9 @@ const PostCard = ({ post, onNav, layout = 'std' }) => {
       <div className="pc-body">
         <div className="pc-meta mono">
           <span className="pc-cat" style={{ color: h.color }}>{h.name.toUpperCase()}</span>
-          <span>\u00b7</span>
+          <span>·</span>
           <span>{post.readMin} min</span>
-          <span>\u00b7</span>
+          <span>·</span>
           <span>{window.fromNow(post.date)}</span>
         </div>
         <h3 className="pc-title">{post.title}</h3>
@@ -238,8 +248,8 @@ const useReadingPrefs = () => {
 
 const ReadingControls = ({ prefs, setPrefs }) => (
   <div className="reading-controls" role="group" aria-label="Reading preferences">
-    <button className={`rc-btn ${prefs.theme === 'dark' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, theme: 'dark' }))} title="Dark theme">\u25D1</button>
-    <button className={`rc-btn ${prefs.theme === 'light' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, theme: 'light' }))} title="Light theme">\u2600</button>
+    <button className={`rc-btn ${prefs.theme === 'dark' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, theme: 'dark' }))} title="Dark theme">◑</button>
+    <button className={`rc-btn ${prefs.theme === 'light' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, theme: 'light' }))} title="Light theme">☀</button>
     <span className="rc-sep" aria-hidden/>
     <button className={`rc-btn rc-text ${prefs.width === 'narrow' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, width: 'narrow' }))} title="Narrow column">narrow</button>
     <button className={`rc-btn rc-text ${prefs.width === 'wide' ? 'on' : ''}`} onClick={() => setPrefs(p => ({ ...p, width: 'wide' }))} title="Wide column">wide</button>

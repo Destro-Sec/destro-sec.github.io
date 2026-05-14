@@ -2,12 +2,19 @@
 
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ─── Logo ─────────────────────────────────────────
+// width/height set to original asset dimensions (733×163) so browser
+// can reserve the correct aspect-ratio space before the image loads (prevents CLS).
 const Logo = ({ size = 28 }) => (
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <img
-      src="assets/logo.png"
+      src="/assets/logo.png"
       alt="Destro Sec"
+      width={733}
+      height={163}
       style={{ height: size + 6, width: 'auto', display: 'block' }}
     />
   </div>
@@ -17,12 +24,49 @@ const Logo = ({ size = 28 }) => (
 const Nav = ({ current, onNav }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const burgerRef = useRef(null);
+  const drawerRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Focus trap + Escape key for mobile drawer
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const panel = drawerRef.current;
+    if (!panel) return;
+
+    const focusable = panel.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (first) first.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        burgerRef.current?.focus();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
+
+  const closeDrawer = () => {
+    setMobileOpen(false);
+    burgerRef.current?.focus();
+  };
 
   const links = [
     { id: 'home', label: 'Home' },
@@ -34,7 +78,8 @@ const Nav = ({ current, onNav }) => {
 
   return (
     <>
-      <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <nav className={`nav ${scrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
         <div className="nav-inner container">
           <button onClick={() => onNav('home')} className="nav-logo" aria-label="Destro Sec home">
             <Logo />
@@ -45,6 +90,7 @@ const Nav = ({ current, onNav }) => {
                 key={l.id}
                 onClick={() => onNav(l.id)}
                 className={`nav-link ${current === l.id ? 'active' : ''}`}
+                aria-current={current === l.id ? 'page' : undefined}
               >
                 {l.label}
               </button>
@@ -55,23 +101,42 @@ const Nav = ({ current, onNav }) => {
               Get a Quote
             </button>
           </div>
-          <button className="nav-burger" onClick={() => setMobileOpen(true)} aria-label="Open menu">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <button
+            ref={burgerRef}
+            className="nav-burger"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-drawer"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
               <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </button>
         </div>
       </nav>
       {mobileOpen && (
-        <div className="mobile-drawer" onClick={() => setMobileOpen(false)}>
-          <div className="mobile-drawer-panel glass" onClick={e => e.stopPropagation()}>
-            <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">×</button>
+        <div
+          className="mobile-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          id="mobile-drawer"
+          onClick={closeDrawer}
+        >
+          <div
+            ref={drawerRef}
+            className="mobile-drawer-panel glass"
+            onClick={e => e.stopPropagation()}
+          >
+            <button className="mobile-close" onClick={closeDrawer} aria-label="Close menu">×</button>
             {links.map(l => (
-              <button key={l.id} onClick={() => { onNav(l.id); setMobileOpen(false); }} className="mobile-link">
+              <button key={l.id} onClick={() => { onNav(l.id); closeDrawer(); }} className="mobile-link"
+                aria-current={current === l.id ? 'page' : undefined}>
                 {l.label}
               </button>
             ))}
-            <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={() => { onNav('quote'); setMobileOpen(false); }}>
+            <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={() => { onNav('quote'); closeDrawer(); }}>
               Get a Quote
             </button>
           </div>
@@ -112,9 +177,9 @@ const Footer = ({ onNav }) => (
         <div className="footer-col">
           <h5>Connect</h5>
           <a href="mailto:info@destrosec.com">info@destrosec.com</a>
-          <a href="#" onClick={e => e.preventDefault()}>LinkedIn</a>
-          <a href="#" onClick={e => e.preventDefault()}>Instagram</a>
-          <a href="#" onClick={e => e.preventDefault()}>GitHub</a>
+          <a href="https://linkedin.com/company/destro-sec" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://instagram.com/destro_sec" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://github.com/destrosec" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </div>
       <div className="footer-bottom">
@@ -133,7 +198,7 @@ function useReveal() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (document.documentElement.hasAttribute('data-no-scroll-anim')) {
+    if (document.documentElement.hasAttribute('data-no-scroll-anim') || prefersReducedMotion()) {
       el.classList.add('in');
       return;
     }
@@ -171,26 +236,40 @@ const VerticalIcon = ({ vertical, size = 24 }) => {
   return null;
 };
 
-// ─── Wireframe Cube (decorative) ──────────────────
+// ─── Wireframe Cube (decorative) ─────────────────────────────────────────────
+// Pauses RAF when off-screen and respects prefers-reduced-motion.
 const WireframeCube = ({ size = 600, intensity = 1 }) => {
   const [t, setT] = useState(0);
+  const sceneRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
-    if (document.documentElement.hasAttribute('data-no-scroll-anim')) return;
-    let raf, start = performance.now();
+    const el = sceneRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    if (document.documentElement.hasAttribute('data-no-scroll-anim') || prefersReducedMotion()) return;
+    let raf;
+    const start = performance.now();
     const tick = (now) => {
       setT((now - start) / 1000);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [visible]);
 
   const rotY = (t * 8) % 360;
   const rotX = 25 + Math.sin(t * 0.3) * 5;
   const op = 0.18 * intensity;
 
   return (
-    <div className="wireframe-cube-scene" style={{ width: size, height: size }} aria-hidden>
+    <div ref={sceneRef} className="wireframe-cube-scene" style={{ width: size, height: size }} aria-hidden>
       <div className="wireframe-cube" style={{ transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)` }}>
         {['front','back','right','left','top','bottom'].map(face => (
           <div key={face} className={`wf-face wf-${face}`} style={{ borderColor: `rgba(255,107,53,${op})` }}>
@@ -310,5 +389,6 @@ const TEAM = [
 Object.assign(window, {
   Logo, Nav, Footer, Reveal, useReveal,
   VerticalIcon, WireframeCube, Stat,
-  VERTICAL_DATA, TEAM
+  VERTICAL_DATA, TEAM,
+  prefersReducedMotion
 });
